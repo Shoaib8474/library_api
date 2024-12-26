@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('library_db', 'root', '', {
+const sequelize = new Sequelize('library_db', 'root', '@Lickweed12', {
   host: 'localhost',
   dialect: 'mysql',
   logging: console.log,

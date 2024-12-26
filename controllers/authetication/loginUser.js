@@ -6,7 +6,7 @@ const { User } = require('../../models');
 const JWT_SECRET = 'secret_key';
 
 
-const login =  async (req, res) => {
+const login =  async (req, res, next) => {
     try {
       const { email, password } = req.body;
       console.log(req.body)
@@ -33,10 +33,10 @@ const login =  async (req, res) => {
       
       res.json({ token });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)
     }
   };
 
 
   
-  module.exports = login
+  module.exports = login;

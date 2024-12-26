@@ -5,10 +5,20 @@ const { User } = require('../../models');
 const JWT_SECRET = 'secret_key';
 
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     try {
       const { username, email, password } = req.body;
       console.log(req.body);
+
+
+      //Check User already exist or not
+      const record = await User.findOne({
+        where: {email: req.body.email}
+      })
+      
+      if(record){
+         res.status(400).json({success: false, error: "User already exist, use different email_id"});
+      }
       
       const hashedPassword = await bcrypt.hash(password, 10);
       
@@ -18,10 +28,10 @@ const register = async (req, res) => {
         email,
         password: hashedPassword
       });
-      
+
       res.status(201).json({ message: 'User registered successfully', userInfo:user });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error)
     }
   };
 

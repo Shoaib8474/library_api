@@ -4,7 +4,7 @@ const sequelize = require("../../config/database");
 
 const authorQueries = {
   // 1. Finding Authors with Specific Publication Counts
-  authorWithPublicationCount: async (req, res) => {
+  authorWithPublicationCount: async (req, res, next) => {
     try {
       const prolificAuthors = await Author.findAll({
         attributes: {
@@ -30,15 +30,12 @@ const authorQueries = {
         data: prolificAuthors,
       });
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        error: error.message,
-      });
+      next(error);
     }
   },
 
   // 2) Finding Books with search term
-  authorWithSpecificGenre: async (req, res) => {
+  authorWithSpecificGenre: async (req, res, next) => {
     const { searchTerm = "Fiction" } = req.body;
     try {
       const authors = await Author.findAll({
@@ -68,14 +65,10 @@ const authorQueries = {
         data: authors,
       });
     } catch (error) {
-        return res.send({ success: false, error: error.message });
+      next(error);
     }
   },
-
-
 };
-
-
 
 // authorQueries.authorWithSpecificGenre();
 

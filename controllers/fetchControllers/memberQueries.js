@@ -4,9 +4,8 @@ const sequelize = require("../../config/database");
 const { Op } = require("sequelize");
 
 const memberQueries = {
-
-// 1. Search active members by name or email
-  searchActiveMembers: async (req, res) => {
+  // 1. Search active members by name or email
+  searchActiveMembers: async (req, res, next) => {
     try {
       const { searchTerm } = req.body;
       const members = await Member.findAll({
@@ -35,12 +34,12 @@ const memberQueries = {
       });
       return res.json({ success: true, data: members });
     } catch (error) {
-      return res.send(500).json({ success: false, error: error.message });
+      next(error);
     }
   },
 
   // 2. Find members with overdue books
-  getMembersWithOverdueBooks: async (req, res) => {
+  getMembersWithOverdueBooks: async (req, res, next) => {
     try {
       const members = await Member.findAll({
         include: [
@@ -65,12 +64,12 @@ const memberQueries = {
       });
       return res.json({ success: true, data: members });
     } catch (error) {
-      return res.send(500).json({ success: false, error: error.message });
+      next(error);
     }
   },
 
-    //3. Get member''s current borrowed books with authors
-  getMemberCurrentBooks: async (req, res) => {
+  //3. Get member''s current borrowed books with authors
+  getMemberCurrentBooks: async (req, res, next) => {
     console.log(req.body);
     try {
       const { memberId = 1 } = req.body;
@@ -99,43 +98,48 @@ const memberQueries = {
       });
       return res.json({ success: true, data: members });
     } catch (error) {
-      return res.send(500).json({ success: false, error: error.message });
+      next(error); // Forward error to the centralized error handler
     }
   },
 
-     // 4. Get member's borrowing history between dates
-   async getMemberBorrowingHistory(req, res) {
-    const { startDate = new Date('2024-12-01'), endDate = new Date('2025-01-31') } = req.body;
+  // 4. Get member's borrowing history between dates
+  async getMemberBorrowingHistory(req, res, next) {
+    const {
+      startDate = new Date("2024-12-01"),
+      endDate = new Date("2025-01-31"),
+    } = req.body;
     try {
-        const history = await Member.findOne({
-            // where: { id: memberId },
-            include: [{
-                model: Borrowing,
-                where: {
-                    borrowDate: {
-                        [Op.between]: [startDate, endDate]
-                    }
-                },
-                include: [{
-                    model: Book,
-                    attributes: ['title', 'ISBN'],
-                    include: [{
-                        model: Author,
-                        attributes: ['name'],
-                        through: { attributes: [] }
-                    }]
-                }]
-            }]
-        });
-        return res.json({ success: true, data: history });
+      const history = await Member.findOne({
+        // where: { id: memberId },
+        include: [
+          {
+            model: Borrowing,
+            where: {
+              borrowDate: {
+                [Op.between]: [startDate, endDate],
+              },
+            },
+            include: [
+              {
+                model: Book,
+                attributes: ["title", "ISBN"],
+                include: [
+                  {
+                    model: Author,
+                    attributes: ["name"],
+                    through: { attributes: [] },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      return res.json({ success: true, data: history });
     } catch (error) {
-        return res.send(500).json({success: false, error: error.message});
+      next(error);
     }
-}
-
-
+  },
 };
-
-
 
 module.exports = memberQueries;
