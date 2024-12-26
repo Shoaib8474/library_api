@@ -19,7 +19,10 @@ node databaseSeeder.js
     "sequelize": "^6.37.5"
  }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d11715388df539b534b9b13a30580f1b92bd96d8
 ### Authentication API Endpoints
 const auth = require('./routes/authetication/registrationLogin.route');
 
