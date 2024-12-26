@@ -8,6 +8,8 @@
 
 ## Seed the database:
 node databaseSeeder.js
+
+## Dependencies:
  {
     "bcrypt": "^5.1.1",
     "express": "^4.21.2",
@@ -15,8 +17,6 @@ node databaseSeeder.js
     "mysql2": "^3.11.5",
     "sequelize": "^6.37.5"
  }
-
-## Dependencies:
 
 ### Authentication API Endpoints
 const auth = require('./routes/authetication/registrationLogin.route');
