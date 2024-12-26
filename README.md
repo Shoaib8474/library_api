@@ -14,6 +14,7 @@ node databaseSeeder.js
  {
     "bcrypt": "^5.1.1",
     "express": "^4.21.2",
+    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.5",
     "sequelize": "^6.37.5"
