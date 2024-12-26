@@ -9,6 +9,8 @@
 
 ## Seed the database:
 node databaseSeeder.js
+
+## Dependencies:
  {
     "bcrypt": "^5.1.1",
     "express": "^4.21.2",
@@ -17,13 +19,8 @@ node databaseSeeder.js
     "sequelize": "^6.37.5"
  }
 
-## Dependencies:
 
 ### Authentication API Endpoints
-const auth = require('./routes/authetication/registrationLogin.route');
-
-router.post('/register', register);
-router.post('/login', login);
 
 ## 1. Register:
 POST  http://localhost:3000/api/register
